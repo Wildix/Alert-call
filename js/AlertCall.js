@@ -1,6 +1,6 @@
 var options = {
-		host: 'gena.wildixin.com',
-		login: 'admin',
+		host: '',
+		login: '',
 		password: ''
 }
 
