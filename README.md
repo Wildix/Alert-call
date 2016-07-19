@@ -28,6 +28,14 @@ Upload the following sound files to WMS using exactly the following names:
 
 in Dialpan -> Dialplan rules menu and add two extensions which are used as pin to start a test or real alert call:
 
+example:
+
+123 Application: Set EVENT_NAME call_out_test
+    Application: Play sound call_out_test
+
+456 Application: Set EVENT_NAME call_out_real
+    Application: Play sound call_out_real 
+
 ##Enter in users dialplan the new Alert Code Feature
 
 usage example 222, Application: Set CallOut, Parameters:callOutPb,8,events_dialplan,users the parameters are:
