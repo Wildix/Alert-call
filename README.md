@@ -61,10 +61,9 @@ The pin must be stored in the field "Document Number"
 
 Uncompress this project zip file and upload the file AlertCalls.php from https://github.com/Wildix/Alert-call/tree/master/pbx/scripts to the PBX directory /var/www/scripts.
 
-Open index.html with a browser or alternatively load the content on a web server. Configure the needed parameters and enter a valid user in the settings.
 
 ##Usage
 
-Connect to the Web Interface at page https://pbxdomain/Alert-call
+Open index.html with a browser or alternatively load the content on a web server. Configure the needed parameters and enter a valid user in the settings.
 
-Dial 222 using the PBX, monitor the Alert progress via the Web Interface
+Dial 222 and enter 123 or 456, monitor the Alert progress via the Web Interface
