@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Alert-call System</title>
+
+<script type="text/javascript" src="assets/js/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery-ui-1.12.0/jquery-ui.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.loadmask.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/js/js.Date.additional.js"></script>
+
+<script type="text/javascript" src="js/AlertCall.js"></script>
+
+
+<link href="assets/js/jquery-ui-1.12.0/jquery-ui.min.css" rel="stylesheet">
+<link href="assets/js/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.css" rel="stylesheet">
+<link href="assets/css/jquery.loadmask.css" rel="stylesheet">
+<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="assets/css/wildix-font.css" rel="stylesheet">
+
+<link href="css/AlertCall.css" rel="stylesheet">
+
+</head>
+<body class="main">
+	<div class="body_wrapper">
+		<div class="header">
+			<table width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="form-inline">
+					<div class="dateForm form-group">
+						<label for="from-date"> From </label> <input class="form-control" type="text" id="from-date">
+						<label for="to-date"> To </label> <input class="form-control" type="text" id="to-date">
+						<button id="update-button" type="button" class="btn btn-default fa fa-check"></button>
+					</div>
+				</td>
+				<td align="right" width="100px">
+					<a id="export-btn" class="fa fa-download"></a>
+					<i id="settings-btn" class="fa fa-cogs"></i>
+				</td>
+			</tr>
+			</table>
+		</div>
+
+		<div id="content"></div>
+
+		<div id="settings-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		        		<h4>Settings</h4>
+		    		</div>
+		    		<div class="modal-body">
+		    			<div class="form-group">
+				         	<table width="100%">
+					        <tr>
+					            <td width='90px'><label for="settings-modal-host">Host</label></td>
+					            <td><input class="form-control" id="settings-modal-host" type="text"></td>
+					        </tr>
+					        <tr>
+					            <td><label for="settings-modal-login">Login</label></td>
+					            <td><input class="form-control" id="settings-modal-login" type="text"></td>
+					        </tr>
+					        <tr>
+					            <td><label for="settings-modal-password">Password</label></td>
+					            <td><input class="form-control" id="settings-modal-password" type="password"></td>
+					        </tr>
+					        </table>
+				        </div>
+		     	 	</div>
+	     	 		<div class="modal-footer">
+			        	<button id="settings-modal-save-button"  type="button" class="btn btn-primary fa fa-check"></button>
+			      	</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="error-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		        		<h4>Error</h4>
+		    		</div>
+		    		<div class="modal-body">
+
+		     	 	</div>
+	     	 		<div class="modal-footer">
+			        	<button id="error-modal-save-button"  type="button" class="btn btn-primary fa fa-check"></button>
+			      	</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div style="clear: both"></div>
+        <div class="footer">
+            <b>Wildix s.r.l.</b> - P.IVA 01928890225 - Telefono: +39 0461.1715111 - e-mail :  <a target="_blank" href="mailto:marketing@wildix.com">marketing@wildix.com</a>
+        </div>
+	</div>
+</body>
+</html>
