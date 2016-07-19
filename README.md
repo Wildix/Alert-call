@@ -57,7 +57,9 @@ The pin must be stored in the field "Document Number"
 
 ##Install
 
-Uncompress this project zip file and upload it using the admin user of the PBX to the directory /var/www/
+Uncompress this project zip file and upload the file AlertCalls.php from https://github.com/Wildix/Alert-call/tree/master/pbx/scripts to the PBX directory /var/www/scripts.
+
+Open index.html with a browser or alternatively load the content on a web server. Configure the needed parameters and enter a valid user in the settings.
 
 ##Usage
 
