@@ -30,11 +30,11 @@ in Dialpan -> Dialplan rules menu and add two extensions which are used as pin t
 
 example:
 
-123 Application: Set EVENT_NAME call_out_test
-    Application: Play sound call_out_test
+*123 Application: Set EVENT_NAME call_out_test*
+    *Application: Play sound call_out_test*
 
-456 Application: Set EVENT_NAME call_out_real
-    Application: Play sound call_out_real 
+*456 Application: Set EVENT_NAME call_out_real*
+    *Application: Play sound call_out_real* 
 
 ##Enter in users dialplan the new Alert Code Feature
 
