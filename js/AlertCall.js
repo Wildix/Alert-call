@@ -1,9 +1,6 @@
-
-
-
 var options = {
-		host: '',
-		login: '',
+		host: 'gena.wildixin.com',
+		login: 'admin',
 		password: ''
 }
 
@@ -19,8 +16,8 @@ var tagsMap = {
 		wrong_pin: 'Wrong pin',
 		no_pin: 'No pin',
 		correct_pin: 'Correct pin',
-
 }
+
 
 $(document).ready(function() {
 
@@ -31,11 +28,16 @@ $(document).ready(function() {
 		}
 	});
 
-    var settingsModal = $("#settings-modal");
+
+	loadSettings();
+
+	$('#settings-modal-host').val(options.host);
+	$('#settings-modal-login').val(options.login);
+	$('#settings-modal-password').val(options.password);
 
 
     $('#settings-btn').on('click', function(){
-    	settingsModal.modal('show');
+    	$("#settings-modal").modal('show');
     });
 
 
@@ -108,38 +110,29 @@ $(document).ready(function() {
 
 
 	$('#settings-modal-save-button').on('click', function(){
-
     	localStorage.setItem("host", $('#settings-modal-host').val());
-    	localStorage.setItem("extension", $('#settings-modal-login').val());
+    	localStorage.setItem("login", $('#settings-modal-login').val());
     	localStorage.setItem("password", $('#settings-modal-password').val());
 
-    	settingsModal.modal('hide');
+    	loadSettings();
 
-    	initialise();
+    	$("#settings-modal").modal('hide');
+
+    	if(isFilledSettings()){
+    		initialise();
+    	}
     });
 
     $('#error-modal-save-button').on('click', function(){
     	$('#error-modal').modal('hide');
     });
 
-
     initialise();
 });
 
-
 function initialise(){
-	options = {
-			host: localStorage.getItem("host"),
-			login: localStorage.getItem("extension"),
-			password: localStorage.getItem("password")
-	}
 
-	$('#settings-modal-host').val(options.host);
-	$('#settings-modal-login').val(options.login);
-	$('#settings-modal-password').val(options.password);
-
-
-	if(options.host != '' && options.login!='' && options.password!=''){
+	if(isFilledSettings()){
 		$.ajax({
     		url: location.protocol+'//'+options.host+'/api/v1/personal/login',
     		type: 'POST',
@@ -163,9 +156,25 @@ function initialise(){
     			}
     		}
     	});
+	}else{
+		$("#settings-modal").modal('show');
 	}
 }
 
+function isFilledSettings(){
+	if(options.host != '' && options.login != '' && options.password != ''){
+		return true;
+	}
+	return false;
+}
+function loadSettings(){
+	$.each(['host', 'login', 'password'], function(i, key){
+		var val = localStorage.getItem(key);
+		if(val){
+			options[key] = val;
+		}
+	});
+}
 
 var _loadTimer = null;
 function startTimer(){
@@ -213,7 +222,7 @@ function loadData(withoutMask){
 	}
 
 	$.ajax({
-		url: location.protocol+'//'+options.host+'/scripts/AlertCall.php',
+		url: location.protocol+'//'+options.host+'/scripts/AlertCalls.php',
 		type: 'GET',
 		data: {
 			filter: filter
@@ -256,13 +265,14 @@ function printData(data){
 
 		if(!result[id]){
 			result[id] = {
-					start: new Date(+(id+''+'000')),
+					start: null,
 					end: '',
 					real: false,
 					contacts: {}
 			};
 			numberLink[id]= {};
 		}
+
 
 		if(!result[id]['contacts'][name]){
 			result[id]['contacts'][name] = {};
@@ -276,15 +286,13 @@ function printData(data){
 			}
 		}
 
-
 		var item = {
 				id: id,
 				number: number,
 				name: name,
 				start: new Date(data[i]['start'].replace(/-/g, "/")),
 				end: new Date(data[i]['end'].replace(/-/g, "/")),
-				tags:tags,
-
+				tags:tags
 		};
 
 		if($.inArray('stop', tags) >= 0){
@@ -293,7 +301,12 @@ function printData(data){
 
 		if($.inArray('call_out_real', tags) >= 0){
 			result[id].real = true;
-			console.log('real', tags)
+		}
+
+		if(!result[id].start){
+			if($.inArray('start', tags) >= 0){
+				result[id].start = item.start;
+			}
 		}
 
 		result[id]['contacts'][name][number]['calls'].push(item);
@@ -309,8 +322,8 @@ function printData(data){
 		html +="<tr>" +
 				"<th colspan='2'>" +
 					"<span class='type'>"+((pool.real)? 'Real': 'Test')+" </span>" +
-					"<span class='date'>"+pool.start.format('yyyy/mm/dd')+"</span> " +
-					"<span class='time'>"+pool.start.format('HH:MM')+' - '+((pool.end)?pool.end.format('HH:MM'): "")+"</span>" +
+					"<span class='date'>"+((pool.start)?pool.start.format('yyyy/mm/dd'): "")+"</span> " +
+					"<span class='time'>"+((pool.start)?pool.start.format('HH:MM'): "")+' - '+((pool.end)?pool.end.format('HH:MM'): "")+"</span>" +
 				"</th>" +
 				"<th></th>" +
 				"<th></th>" +
