@@ -38,7 +38,11 @@ example:
 
 ##Enter in users dialplan the new Alert Code Feature
 
-usage example 222, Application: Set CallOut, Parameters:callOutPb,8,events_dialplan,users the parameters are:
+In this example we will use 222 as Alert Code number:
+
+*222 Application: Set CallOut, Parameters:callOutPb,8,events_dialplan,users*
+
+parameters usage:
 
 * callOutPb – the phone book where the contacts are stored
 * 8 – the number of contemporary alert calls which should be generated
