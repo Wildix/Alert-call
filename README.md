@@ -1,5 +1,7 @@
 # Alert-call System
 
+Min WMS Version: 3.82.32520.29
+
 ##Introduction
 
 Alert System for Wildix PBXs allows to start an Alert call to reach persons and see if they are available. Each contact called must authenticate using a pin and then accept 0 or decline the call 1.
