@@ -64,6 +64,6 @@ Uncompress this project zip file and upload the file AlertCalls.php from https:/
 
 ##Usage
 
-Open index.html with a browser or alternatively load the content on a web server. Configure the needed parameters and enter a valid user in the settings.
+Open index.html with a browser or alternatively load the content on a web server. Configure the needed parameters and enter a valid user phone number (login) and password in the settings.
 
 Dial 222 and enter 123 or 456, monitor the Alert progress via the Web Interface
