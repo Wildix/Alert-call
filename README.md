@@ -46,7 +46,7 @@ example:
 
 In this example we will use 222 as Alert Code number:
 
-*222 Application: Set CallOut, Parameters:callOutPb,8,events_dialplan,users*
+*222 Application: Set CallOut, Parameters:phonebook,8,events,users,30,1,3,snd*
 
 parameters usage:
 
@@ -54,6 +54,10 @@ parameters usage:
 * 8 – the number of contemporary alert calls which should be generated
 * the dial plan where the pin inserted should be looked up
 * the dial plan where the outgoing calls should be generated
+* 30 - retry count in case of channel unavailable
+* 1 - confirm code
+* 3 - rfuse code
+* snd - directory where to get sound files from
 
 ![Alt text](images/Add new Alert Code Feature.jpeg?raw=true "Create new code")
 
