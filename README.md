@@ -56,7 +56,7 @@ parameters usage:
 * the dial plan where the outgoing calls should be generated
 * 30 - retry count in case of channel unavailable
 * 1 - confirm code
-* 3 - rfuse code
+* 3 - refuse code
 * snd - directory where to get sound files from
 
 ![Alt text](images/Add new Alert Code Feature.jpeg?raw=true "Create new code")
