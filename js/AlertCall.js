@@ -215,7 +215,9 @@ function loadData(withoutMask){
 				from: fromDate,
 				to: toDate
 			},
-			type: 'call'
+			type: {
+            	not: 'fax'
+            }
 	}
 	if(!withoutMask){
 		$(".body_wrapper").mask('Loading ...');
