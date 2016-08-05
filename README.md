@@ -4,7 +4,7 @@ Min WMS Version: 3.82.32520.29
 
 ##Introduction
 
-Alert System for Wildix PBXs allows to start an Alert call to reach persons and see if they are available. Each contact called must authenticate using a pin and then accept 0 or decline the call 1.
+Alert System for Wildix PBXs allows to start an Alert call to reach persons and see if they are available. Each contact called must authenticate using a pin and then accept or decline the call.
 
 A Web Application allows to monitor how the alarm call is proceeding.
 
@@ -14,7 +14,7 @@ A Web Application allows to monitor how the alarm call is proceeding.
 * for each contact try up to three phone numbers
 * for each phone number try up to three times
 * for each try ask a pin after the contact has answered (as entered in the field "Document Number")
-* if the pin is successful ask to press 0 or 1
+* if the pin is successful ask to press confirm or refuse code (as set in the Alert Code parameters string, see below)
 
 ##Upload sounds
 
@@ -22,11 +22,23 @@ Upload the following sound files to WMS using exactly the following names:
 
 * pin_test_or_real_start – start a test or real alert call
 * pin_accepted – confirmation pin has been accepted
-* 0_confirm_1_refuse – press 0 to accept the alert call, 1 to refuse the alert call
 * call_out_test – confirm that alert call system in test mode was started
 * call_out_real – confirm that alert call system was started
+* enter_personal_pin – enter the personal pin
+* correct_pin – personal pin is correct
+* wrong_pin – personal pin is wrong
+* confirm_or_refuse – press confirm code to accept the alert call, refuse code to refuse the alert call
 
-![Alt text](images/Upload sounds.jpeg?raw=true "Upload sounds")
+If needed create the custom sound directories. In this exampe "snd", "123", "456":
+* snd - for initial alert souns (pin_test_or_real_start, pin_accepted, call_out_test, call_out_real)
+* 123 - for male test alert sounds. The directory name have to be same with start test alert pin
+* 456 - for female real alert sounds. The directory name have to be same with start real alert pin
+
+![Alt text](images/Sound_directories.jpeg?raw=true "Sound directories")
+
+![Alt text](images/Initial_alert_sounds.jpeg?raw=true "Initial sounds")
+
+![Alt text](images/Upload_sounds.jpeg?raw=true "Upload sounds")
 
 ##Create a new dialplan rule “events_dialplan”
 
@@ -57,7 +69,7 @@ parameters usage:
 * 30 - retry count in case of channel unavailable
 * 1 - confirm code
 * 3 - refuse code
-* snd - directory where to get sound files from
+* snd - directory where to get initial alert sound files from
 
 ![Alt text](images/Add new Alert Code Feature.jpeg?raw=true "Create new code")
 
