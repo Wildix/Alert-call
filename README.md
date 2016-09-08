@@ -28,7 +28,7 @@ Upload the following sound files to WMS using exactly the following names:
 * confirm_or_refuse – press confirm code to accept the alert call, refuse code to refuse the alert call
 * procedure_complete – accepted entered pin or confirm code
 
-If needed create the custom sound directories. In this exampe "snd", "123", "456":
+Create the sound directories. In this exampe "snd", "call_out_test", "call_out_real":
 * snd - for initial alert sounds (pin_test_or_real_start, wrong_pin, call_out_test, call_out_real, procedure_complete)
 * call_out_test - for male test alert sounds (call_out_test, enter_personal_pin, wrong_pin, confirm_or_refuse, procedure_complete)
 * call_out_real - for female real alert sounds (call_out_test, enter_personal_pin, wrong_pin, confirm_or_refuse, procedure_complete)
