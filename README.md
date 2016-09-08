@@ -21,24 +21,26 @@ A Web Application allows to monitor how the alarm call is proceeding.
 Upload the following sound files to WMS using exactly the following names:
 
 * pin_test_or_real_start – start a test or real alert call
-* pin_accepted – confirmation pin has been accepted
 * call_out_test – confirm that alert call system in test mode was started
 * call_out_real – confirm that alert call system was started
 * enter_personal_pin – enter the personal pin
-* correct_pin – personal pin is correct
 * wrong_pin – personal pin is wrong
 * confirm_or_refuse – press confirm code to accept the alert call, refuse code to refuse the alert call
+* procedure_complete – accepted entered pin or confirm code
 
 If needed create the custom sound directories. In this exampe "snd", "123", "456":
-* snd - for initial alert souns (pin_test_or_real_start, pin_accepted, call_out_test, call_out_real)
-* 123 - for male test alert sounds. The directory name have to be same with start test alert pin
-* 456 - for female real alert sounds. The directory name have to be same with start real alert pin
+* snd - for initial alert sounds (pin_test_or_real_start, wrong_pin, call_out_test, call_out_real, procedure_complete)
+* call_out_test - for male test alert sounds (call_out_test, enter_personal_pin, wrong_pin, confirm_or_refuse, procedure_complete)
+* call_out_real - for female real alert sounds (call_out_test, enter_personal_pin, wrong_pin, confirm_or_refuse, procedure_complete)
+The name for male and female sound directory have to be same with EVENT_NAME (see below)
 
 ![Alt text](images/Sound_directories.jpeg?raw=true "Sound directories")
 
 ![Alt text](images/Initial_alert_sounds.jpeg?raw=true "Initial sounds")
 
-![Alt text](images/Upload_sounds.jpeg?raw=true "Upload sounds")
+![Alt text](images/Call_out_real_sounds.jpeg?raw=true "Call-out real sounds")
+
+![Alt text](images/Call_out_test_sounds.jpeg?raw=true "Call-out test sounds")
 
 ##Create a new dialplan rule “events_dialplan”
 
