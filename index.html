@@ -13,7 +13,6 @@
 
 <script type="text/javascript" src="js/AlertCall.js"></script>
 
-
 <link href="assets/js/jquery-ui-1.12.0/jquery-ui.min.css" rel="stylesheet">
 <link href="assets/js/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.css" rel="stylesheet">
 <link href="assets/css/jquery.loadmask.css" rel="stylesheet">
@@ -36,7 +35,8 @@
 						<button id="update-button" type="button" class="btn btn-default fa fa-check"></button>
 					</div>
 				</td>
-				<td align="right" width="100px">
+				<td align="right" width="160px">
+					<i id="call-errors-btn" class="fa fa-exclamation-triangle"></i>
 					<a id="export-btn" class="fa fa-download"></a>
 					<i id="settings-btn" class="fa fa-cogs"></i>
 				</td>
@@ -89,7 +89,24 @@
 
 		     	 	</div>
 	     	 		<div class="modal-footer">
-			        	<button id="error-modal-save-button"  type="button" class="btn btn-primary fa fa-check"></button>
+			        	<button id="error-modal-ok-button"  type="button" class="btn btn-primary fa fa-check"></button>
+			      	</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="call-errors-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		        		<h4>Errors</h4>
+		    		</div>
+		    		<div class="modal-body">
+
+		     	 	</div>
+	     	 		<div class="modal-footer">
+			        	<button id="call-errors-modal-ok-button"  type="button" class="btn btn-primary fa fa-check"></button>
 			      	</div>
 				</div>
 			</div>

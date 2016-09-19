@@ -4,20 +4,74 @@ var options = {
 		password: ''
 }
 
-var tagsMap = {
-		no_answer: 'No answer',
+/*
+ * English
+ */
+/*var translations = {
+		Name: 'Name',
+		Number: 'Number',
+		Start: 'Start',
+		CallState: 'Call state',
+		PinState: 'Pin state',
+		Info: 'Info',
+
+
+		//tags
 		emergency_real: '',
 		call_out_test: '',
 		call_out_real: '',
 		start: '',
 		stop: '',
+
+		no_answer: 'No answer',
+		answered: 'Answered',
 		confirmed: 'Confirmed',
 		refused: 'Refused',
-		wrong_pin: 'Wrong pin',
+		busy: 'Busy',
+		congestion: 'Not available',
+
+
 		no_pin: 'No pin',
 		correct_pin: 'Correct pin',
+		pin_not_correct: 'Pin not correct'
+}*/
+/*
+ * Italy
+ */
+var translations = {
+		Name: 'Nome',
+		Number: 'Numero',
+		Start: 'Inizio',
+		CallState: 'Stato chiamata',
+		PinState: 'Stato Pin',
+		Info: 'Info',
+
+
+		/*
+		 * tags
+		 */
+		emergency_real: '',
+		call_out_test: '',
+		call_out_real: '',
+		start: '',
+		stop: '',
+
+		no_answer: 'Non risposto',
+		answered: 'Risposto',
+		confirmed: 'Confermato',
+		refused: 'Rifiutato',
+		busy: 'Occupato',
+		congestion: 'Non disponibile',
+
+
+		no_pin: 'No pin',
+		correct_pin: 'Pin corretto',
+		pin_not_correct: 'Pin non corretto'
 }
 
+
+var callsTags = ['no_answer', 'answered', 'confirmed', 'refused', 'busy', 'congestion'];
+var pinTags = ['no_pin', 'correct_pin', 'pin_not_correct'];
 
 $(document).ready(function() {
 
@@ -48,6 +102,10 @@ $(document).ready(function() {
     $('#update-button').on('click', function(){
     	startTimer();
     	loadData();
+    });
+
+    $('#call-errors-btn').on('click', function(){
+    	$("#call-errors-modal").modal('show');
     });
 
 
@@ -123,8 +181,11 @@ $(document).ready(function() {
     	}
     });
 
-    $('#error-modal-save-button').on('click', function(){
+    $('#error-modal-ok-button').on('click', function(){
     	$('#error-modal').modal('hide');
+    });
+    $('#call-errors-modal-ok-button').on('click', function(){
+    	$('#call-errors-modal').modal('hide');
     });
 
     initialise();
@@ -258,11 +319,20 @@ function printData(data){
 
 	var result = {};
 	var numberLink = {};
+	var errors = null;
+
 	for(var i=0; i < data.length; i++){
-		var id = data[i]['src'];
+		var id = data[i]['from_number'];
 		var name = data[i]['to_name']
 		var number = data[i]['to_number']
 		var tags = data[i]['lastdata'].replace(/^tags:/, '');
+
+		var numberID = tags.match(/number(\d)/i);
+		if(numberID && numberID[1]){
+			numberID = numberID[1]+'-'+number;
+		}
+
+		//console.log(tags);
 		tags = $.map(tags.split(","), $.trim);
 
 		if(!result[id]){
@@ -281,9 +351,10 @@ function printData(data){
 			numberLink[id][name] = [];
 		}
 
-		if(!result[id]['contacts'][name][number]){
-			numberLink[id][name].push(number);
-			result[id]['contacts'][name][number] = {
+
+		if(!result[id]['contacts'][name][numberID]){
+			numberLink[id][name].push(numberID);
+			result[id]['contacts'][name][numberID] = {
 					calls: []
 			}
 		}
@@ -311,10 +382,31 @@ function printData(data){
 			}
 		}
 
-		result[id]['contacts'][name][number]['calls'].push(item);
+		if($.inArray('chanunavail', tags) >= 0){
+
+			if(!errors){
+				errors = {};
+			}
+
+			if(!errors[id]){
+				errors[id] = {};
+			}
+			if(!errors[id][name]){
+				errors[id][name] = [];
+			}
+
+			errors[id][name].push(item);
+			continue;
+		}
+
+
+		result[id]['contacts'][name][numberID]['calls'].push(item);
 	}
 
+	printErrors(errors);
 
+	var countNumbers = 3;
+	var countAttempts = 3;
 	var html = '';
 	$.each(result, function(id, pool){
 
@@ -327,21 +419,83 @@ function printData(data){
 					"<span class='date'>"+((pool.start)?pool.start.format('yyyy/mm/dd'): "")+"</span> " +
 					"<span class='time'>"+((pool.start)?pool.start.format('HH:MM'): "")+' - '+((pool.end)?pool.end.format('HH:MM'): "")+"</span>" +
 				"</th>" +
-				"<th></th>" +
-				"<th></th>" +
+				"<th colspan='11'></th>" +
 				"</tr>";
+
+
+		html +="<tr>" +
+				"<th>"+translations.Name+"</th>";
+		for(var i=1; i < countNumbers+1; i++){
+			html +="<th>"+translations.Number+" "+i+"</th>" +
+				"<th>"+translations.Start+" "+i+"</th>" +
+				"<th>"+translations.CallState+" "+i+"</th>" +
+				"<th>"+translations.PinState+" "+i+"</th>";
+		}
+		html +="</tr>";
 		html +='</thead>';
 		html +='<tbody>';
 		$.each(pool.contacts, function(name, numbers){
-			html +='<tr><th rowspan="'+countCalls(numbers)+'">'+name+'</th></tr>';
-			for(var i=0; i < numberLink[id][name].length; i++){
 
-				var calls = numbers[numberLink[id][name][i]].calls;
-				for(var j=0; j < calls.length; j++){
-
-					html +='<tr><td>'+calls[j].number+'</td><td>'+calls[j].start.format('yyyy/mm/dd HH:MM:ss')+' - '+calls[j].end.format('HH:MM:ss')+'</td><td>'+getTags(calls[j].tags)+'</td></tr>';
+			for(var j=0; j < countAttempts; j++){
+				html +='<tr>';
+				if(j==0){ // if first line show name
+					html +='<td>'+name+'</td>';
+				}else{
+					html +='<td></td>';
 				}
+
+				for(var i=0; i < countNumbers; i++){
+					var number = numberLink[id][name][i];
+					if(number){
+						var calls = numbers[number].calls;
+
+						if(j!=0){
+							html +='<td></td>';
+						}
+
+						if(calls[j]){
+
+							var pinState = getPinState(calls[j]);
+							var callState = getCallState(calls[j]);
+							if(!callState && pinState){
+								callState = translations.answered;
+							}
+
+							if(!pinState && (callState == translations.confirmed || callState == translations.refused)){
+								pinState = translations.correct_pin;
+							}
+
+							if(callState == translations.answered && !pinState){
+								pinState = translations.no_pin;
+							}
+
+							if(j==0){
+								// if first line show number
+								html +='<td>'+calls[j].number+'</td>';
+							}
+							html +='<td>'+calls[j].start.format('HH:MM:ss')+'</td>';
+							html +='<td>'+callState+'</td>';
+							html +='<td>'+pinState+'</td>';
+						}else{
+							html +='<td> </td>';
+							html +='<td> </td>';
+							html +='<td> </td>';
+						}
+					}else{
+						html +="<td> </td>";
+						html +="<td> </td>";
+						html +="<td> </td>";
+						html +="<td> </td>";
+					}
+				}
+				html +='</tr>';
 			}
+
+			html +='<tr class="separator">';
+			for(var i=0; i<13; i++){
+				html +="<td> </td>";
+			}
+			html +='</tr>';
 
 		});
 		html +='</tbody>';
@@ -351,6 +505,45 @@ function printData(data){
 	$('#content').html(html);
 }
 
+
+function printErrors(errors){
+
+	if(!errors){
+		$('#call-errors-btn').hide();
+		$('#call-errors-modal .modal-body').html('');
+	}else{
+		$('#call-errors-btn').show();
+		var html = "<table>" +
+				"<tr>" +
+				"<th>"+translations.Name+"</th>" +
+				"<th>"+translations.Number+"</th>" +
+				"<th>"+translations.Start+"</th>" +
+				"<th>"+translations.Info+"</th>" +
+				"</tr>";
+
+		$.each(errors, function(id, pool){
+			$.each(pool, function(name, calls){
+				for(var i=0; i < calls.length; i++){
+
+					var start = '';
+					if(calls[i].start){
+						start = calls[i].start.format('yyyy/mm/dd HH:MM')
+					}
+					html += "<tr>" +
+					"<td>"+name+"</td>" +
+					"<td>"+calls[i].number+"</td>" +
+					"<td>"+start+"</td>" +
+					"<td>"+calls[i].tags.join(', ')+"</td>" +
+					"</tr>";
+				}
+			});
+		});
+
+		html += "</table>";
+
+		$('#call-errors-modal .modal-body').html(html);
+	}
+}
 
 
 function countCalls(numbers){
@@ -362,15 +555,32 @@ function countCalls(numbers){
 	return count;
 }
 
-function getTags(tags){
+function getCallState(call){
+	var tags = call.tags;
 	var result = [];
 	for(var i=0; i < tags.length; i++){
 		var tag = tags[i];
-		if(tagsMap.hasOwnProperty(tag)){
-			tag = tagsMap[tag];
+		if(callsTags.indexOf(tag) >= 0){
+			// if call tag
+			if(translations.hasOwnProperty(tag)){
+				tag = translations[tag];
+			}
+			result.push(tag);
 		}
+	}
+	return result.join(', ');
+}
 
-		if(tag!=''){
+function getPinState(call){
+	var tags = call.tags;
+	var result = [];
+	for(var i=0; i < tags.length; i++){
+		var tag = tags[i];
+		if(pinTags.indexOf(tag) >= 0){
+			// if pin tags
+			if(translations.hasOwnProperty(tag)){
+				tag = translations[tag];
+			}
 			result.push(tag);
 		}
 	}

@@ -6,7 +6,6 @@ body {
 }
 
 .body_wrapper{
-	width: 800px;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -43,14 +42,28 @@ body {
 	width: 100%;
 }
 
+#content tr.separator{
+	background-color: #ddd;
+}
+
 #settings-btn,
-#export-btn{
+#export-btn,
+#call-errors-btn{
 	cursor: pointer;
 	font-size: 25px;
 	margin-left: 20px;
 	text-decoration: none;
 	color: #333;
 }
+
+#settings-btn{
+	margin-right: 10px;
+}
+#call-errors-btn{
+	display: none;
+	color: #e40000;
+}
+
 .table-hover > tbody > tr:hover {
   background-color: #e4e4e4;
 }
@@ -65,4 +78,7 @@ body {
 }
 #settings-modal .form-group td label{
 	display: block;
+}
+#call-errors-modal .modal-body table{
+	width: 100%;
 }
