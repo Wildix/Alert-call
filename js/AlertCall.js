@@ -1,7 +1,8 @@
 var options = {
 		host: '',
 		login: '',
-		password: ''
+		password: '',
+		autorefresh: false
 }
 
 /*
@@ -11,9 +12,11 @@ var options = {
 		Name: 'Name',
 		Number: 'Number',
 		Start: 'Start',
+		End: 'End',
 		CallState: 'Call state',
 		PinState: 'Pin state',
 		Info: 'Info',
+		Trunk: 'Trunk',
 
 
 		//tags
@@ -42,14 +45,14 @@ var translations = {
 		Name: 'Nome',
 		Number: 'Numero',
 		Start: 'Inizio',
+		End: 'Fine',
 		CallState: 'Stato chiamata',
 		PinState: 'Stato Pin',
 		Info: 'Info',
+		Trunk: 'Trunk',
 
 
-		/*
-		 * tags
-		 */
+		//tags
 		emergency_real: '',
 		call_out_test: '',
 		call_out_real: '',
@@ -88,6 +91,7 @@ $(document).ready(function() {
 	$('#settings-modal-host').val(options.host);
 	$('#settings-modal-login').val(options.login);
 	$('#settings-modal-password').val(options.password);
+	$('#settings-modal-autorefresh').prop('checked', options.autorefresh);
 
 
     $('#settings-btn').on('click', function(){
@@ -116,7 +120,11 @@ $(document).ready(function() {
         changeYear: true,
         showButtonPanel: false,
         onSelect: function(){
-        	stopTimer()
+        	if(!options.autorefresh){
+        		stopTimer();
+        	}else{
+        		loadData();
+        	}
         	$('#from-date').datetimepicker('hide');
         	$('#to-date').datetimepicker('option', 'minDate', $('#from-date').datetimepicker('getDate') );
         },
@@ -140,7 +148,12 @@ $(document).ready(function() {
         changeYear: true,
         showButtonPanel: false,
         onSelect: function(){
-        	stopTimer();
+        	if(!options.autorefresh){
+        		stopTimer();
+        	}else{
+        		loadData();
+        	}
+
         	$('#to-date').datetimepicker('hide');
         	$('#from-date').datetimepicker('option', 'maxDate', $('#to-date').datetimepicker('getDate') );
         },
@@ -171,6 +184,7 @@ $(document).ready(function() {
     	localStorage.setItem("host", $('#settings-modal-host').val());
     	localStorage.setItem("login", $('#settings-modal-login').val());
     	localStorage.setItem("password", $('#settings-modal-password').val());
+    	localStorage.setItem("autorefresh", ($('#settings-modal-autorefresh').is(':checked')?1:0));
 
     	loadSettings();
 
@@ -202,6 +216,11 @@ function initialise(){
     			password: options.password
     		},
     		success:function(){
+    			if(options.autorefresh){
+    				startTimer();
+    			}else{
+    				stopTimer();
+    			}
     			loadData();
     		},
     		error: function(jqXHR, textStatus, errorThrown){
@@ -229,10 +248,14 @@ function isFilledSettings(){
 	return false;
 }
 function loadSettings(){
-	$.each(['host', 'login', 'password'], function(i, key){
+	$.each(['host', 'login', 'password', 'autorefresh'], function(i, key){
 		var val = localStorage.getItem(key);
-		if(val){
-			options[key] = val;
+		if(key == 'autorefresh'){
+			options[key] = (val == 1)
+		}else{
+			if(val){
+				options[key] = val;
+			}
 		}
 	});
 }
@@ -326,7 +349,11 @@ function printData(data){
 		var name = data[i]['to_name']
 		var number = data[i]['to_number']
 		var tags = data[i]['lastdata'].replace(/^tags:/, '');
-
+		var trunk = '';
+		var trunkMatches = data[i].dstchannel.match(/^[^\/]+\/(.*?)-[0-9a-z]+$/i)
+		if(trunkMatches && trunkMatches[1]){
+			trunk = trunkMatches[1];
+		}
 		var numberID = tags.match(/number(\d)/i);
 		if(numberID && numberID[1]){
 			numberID = numberID[1]+'-'+number;
@@ -365,6 +392,7 @@ function printData(data){
 				name: name,
 				start: new Date(data[i]['start'].replace(/-/g, "/")),
 				end: new Date(data[i]['end'].replace(/-/g, "/")),
+				trunk: trunk,
 				tags:tags
 		};
 
@@ -419,7 +447,7 @@ function printData(data){
 					"<span class='date'>"+((pool.start)?pool.start.format('yyyy/mm/dd'): "")+"</span> " +
 					"<span class='time'>"+((pool.start)?pool.start.format('HH:MM'): "")+' - '+((pool.end)?pool.end.format('HH:MM'): "")+"</span>" +
 				"</th>" +
-				"<th colspan='11'></th>" +
+				"<th colspan='17'></th>" +
 				"</tr>";
 
 
@@ -428,8 +456,10 @@ function printData(data){
 		for(var i=1; i < countNumbers+1; i++){
 			html +="<th>"+translations.Number+" "+i+"</th>" +
 				"<th>"+translations.Start+" "+i+"</th>" +
+				"<th>"+translations.End+" "+i+"</th>" +
 				"<th>"+translations.CallState+" "+i+"</th>" +
-				"<th>"+translations.PinState+" "+i+"</th>";
+				"<th>"+translations.PinState+" "+i+"</th>" +
+				"<th>"+translations.Trunk+" "+i+"</th>";
 		}
 		html +="</tr>";
 		html +='</thead>';
@@ -449,10 +479,6 @@ function printData(data){
 					if(number){
 						var calls = numbers[number].calls;
 
-						if(j!=0){
-							html +='<td></td>';
-						}
-
 						if(calls[j]){
 
 							var pinState = getPinState(calls[j]);
@@ -471,17 +497,26 @@ function printData(data){
 
 							if(j==0){
 								// if first line show number
-								html +='<td>'+calls[j].number+'</td>';
+								html +='<td title="'+translations.Trunk+': '+calls[j].trunk+'">'+calls[j].number+'</td>';
+							}else{
+								html +='<td> </td>';
 							}
-							html +='<td>'+calls[j].start.format('HH:MM:ss')+'</td>';
-							html +='<td>'+callState+'</td>';
-							html +='<td>'+pinState+'</td>';
+							html +='<td title="'+translations.Trunk+': '+calls[j].trunk+'">'+calls[j].start.format('HH:MM:ss')+'</td>';
+							html +='<td title="'+translations.Trunk+': '+calls[j].trunk+'">'+calls[j].end.format('HH:MM:ss')+'</td>';
+							html +='<td title="'+translations.Trunk+': '+calls[j].trunk+'">'+callState+'</td>';
+							html +='<td title="'+translations.Trunk+': '+calls[j].trunk+'">'+pinState+'</td>';
+							html +='<td title="'+translations.Trunk+': '+calls[j].trunk+'">'+calls[j].trunk+'</td>';
 						}else{
+							html +='<td> </td>';
+							html +='<td> </td>';
+							html +='<td> </td>';
 							html +='<td> </td>';
 							html +='<td> </td>';
 							html +='<td> </td>';
 						}
 					}else{
+						html +="<td> </td>";
+						html +="<td> </td>";
 						html +="<td> </td>";
 						html +="<td> </td>";
 						html +="<td> </td>";
@@ -492,7 +527,7 @@ function printData(data){
 			}
 
 			html +='<tr class="separator">';
-			for(var i=0; i<13; i++){
+			for(var i=0; i<19; i++){
 				html +="<td> </td>";
 			}
 			html +='</tr>';
@@ -503,6 +538,16 @@ function printData(data){
 	});
 
 	$('#content').html(html);
+
+	$('#content .callout .table tr').each(function(){
+		for(var i=1; i < countNumbers+1; i++){
+			var endPos = i*6;
+			$(this).find('td:eq('+endPos+'), th:eq('+endPos+')').addClass('hide');
+			$(this).find('td:eq('+(endPos-3)+'), th:eq('+(endPos-3)+')').addClass('hide');
+		}
+    });
+	var a=1;
+
 }
 
 
