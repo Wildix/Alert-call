@@ -34,15 +34,23 @@ Create the sound directories. In this exampe "snd", "call_out_test", "call_out_r
 * call_out_real - for female real alert sounds (call_out_test, enter_personal_pin, wrong_pin, confirm_or_refuse, procedure_complete)
 The name for male and female sound directory have to be same with EVENT_NAME (see below)
 
+Sound directories:
+
 ![Alt text](images/Sound_directories.jpeg?raw=true "Sound directories")
+
+Initial sounds:
 
 ![Alt text](images/Initial_alert_sounds.jpeg?raw=true "Initial sounds")
 
-![Alt text](images/Call_out_real_sounds.jpeg?raw=true "Call-out real sounds")
+Call out test sounds:
 
 ![Alt text](images/Call_out_test_sounds.jpeg?raw=true "Call-out test sounds")
 
-##Create a new dialplan rule “events_dialplan”
+Call out real sounds:
+
+![Alt text](images/Call_out_real_sounds.jpeg?raw=true "Call-out real sounds")
+
+##Create a new dialplan rule “events”
 
 in Dialpan -> Dialplan rules menu and add two extensions which are used as pin to start a test or real alert call:
 
@@ -77,7 +85,7 @@ parameters usage:
 
 ##Before starting our first alert call we need to create the phonebook indicated above: callOutPb
 
-Three numbers  will be called for each contact: Extension, Work, Mobile
+Three numbers  will be called for each contact: Work, Mobile, Home
 
 The pin must be stored in the field "Document Number"
 
