@@ -62,7 +62,7 @@ example:
 *456 Application: Set EVENT_NAME call_out_real*
     *Application: Play sound call_out_real*
 
-![Alt text](images/Create a new dialplan rule.jpeg?raw=true "Create dialplan")
+![Alt text](images/Create_new_dialplan_rule.jpeg?raw=true "Create dialplan")
 
 ##Enter in users dialplan the new Alert Code Feature
 
@@ -81,7 +81,7 @@ parameters usage:
 * 3 - refuse code
 * snd - directory where to get initial alert sound files from
 
-![Alt text](images/Add new Alert Code Feature.jpeg?raw=true "Create new code")
+![Alt text](images/Add_new_Alert_Code_Feature.jpeg?raw=true "Create new code")
 
 ##Before starting our first alert call we need to create the phonebook indicated above: callOutPb
 
@@ -89,9 +89,9 @@ Three numbers  will be called for each contact: Work, Mobile, Home
 
 The pin must be stored in the field "Document Number"
 
-![Alt text](images/Create the phonebook.jpeg?raw=true "Create phonebook")
+![Alt text](images/Create_the_phonebook.jpeg?raw=true "Create phonebook")
 
-![Alt text](images/Add contacts.jpeg?raw=true "Add contacts")
+![Alt text](images/Add_contacts.jpeg?raw=true "Add contacts")
 
 ##Install
 
