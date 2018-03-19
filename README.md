@@ -2,13 +2,13 @@
 
 Min WMS Version: 3.82.32520.29
 
-##Introduction
+## Introduction
 
 Alert System for Wildix PBXs allows to start an Alert call to reach persons and see if they are available. Each contact called must authenticate using a pin and then accept or decline the call.
 
 A Web Application allows to monitor how the alarm call is proceeding.
 
-##How it works
+## How it works
 
 * call each contact in a phonebook
 * for each contact try up to three phone numbers
@@ -16,7 +16,7 @@ A Web Application allows to monitor how the alarm call is proceeding.
 * for each try ask a pin after the contact has answered (as entered in the field "Document Number")
 * if the pin is successful ask to press confirm or refuse code (as set in the Alert Code parameters string, see below)
 
-##Upload sounds
+## Upload sounds
 
 Upload the following sound files to WMS using exactly the following names:
 
@@ -50,7 +50,7 @@ Call out real sounds:
 
 ![Alt text](images/Call_out_real_sounds.jpeg?raw=true "Call-out real sounds")
 
-##Create a new dialplan rule “events”
+## Create a new dialplan rule “events”
 
 in Dialpan -> Dialplan rules menu and add two extensions which are used as pin to start a test or real alert call:
 
@@ -64,7 +64,7 @@ example:
 
 ![Alt text](images/Create_new_dialplan_rule.jpeg?raw=true "Create dialplan")
 
-##Enter in users dialplan the new Alert Code Feature
+## Enter in users dialplan the new Alert Code Feature
 
 In this example we will use 222 as Alert Code number:
 
@@ -83,7 +83,7 @@ parameters usage:
 
 ![Alt text](images/Add_new_Alert_Code_Feature.jpeg?raw=true "Create new code")
 
-##Before starting our first alert call we need to create the phonebook indicated above: callOutPb
+## Before starting our first alert call we need to create the phonebook indicated above: callOutPb
 
 Three numbers  will be called for each contact: Work, Mobile, Home
 
@@ -93,12 +93,12 @@ The pin must be stored in the field "Document Number"
 
 ![Alt text](images/Add_contacts.jpeg?raw=true "Add contacts")
 
-##Install
+## Install
 
 Uncompress this project zip file and upload the file AlertCalls.php from https://github.com/Wildix/Alert-call/tree/master/pbx/scripts to the PBX directory /var/www/scripts.
 
 
-##Usage
+## Usage
 
 Open index.html with a browser or alternatively load the content on a web server. Configure the needed parameters and enter a valid user phone number (login) and password in the settings.
 
